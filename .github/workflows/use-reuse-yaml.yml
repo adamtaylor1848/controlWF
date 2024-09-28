@@ -1,8 +1,10 @@
 name: Using reusable workflow 
+
 on:
   push:
     branches:
       - master
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -20,6 +22,7 @@ jobs:
         run: npm ci
       - name: Lint code
         run: npm run lint
+  
   test:
     runs-on: ubuntu-latest
     steps:
@@ -73,6 +76,12 @@ jobs:
       artifact-name: dist-files
     #secrets:
       #some-secret: ${{ secrets.some_secret }}
+  print-deploy-result:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print deploy output
+        run: ${{ needs.deploy.outputs.result }}
   report:
     needs: [lint, deploy]
     if: failure()
